@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import * as monaco from 'monaco-editor'
+import '@/config/monaco'
 
 const props = defineProps<{
   modelValue: string
@@ -50,7 +51,7 @@ const createEditorOptions = (): monaco.editor.IStandaloneEditorConstructionOptio
   folding: true,
   glyphMargin: false,
   lightbulb: {
-    enabled: true
+    enabled: monaco.editor.ShowLightbulbIconMode.On
   }
 })
 

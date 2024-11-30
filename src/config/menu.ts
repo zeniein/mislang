@@ -2,7 +2,8 @@ import {
   DashboardIcon, 
   UsersIcon, 
   SettingsIcon,
-  EmailIcon 
+  EmailIcon,
+  ContentIcon
 } from '../components/icons'
 
 export interface MenuItem {
@@ -16,6 +17,11 @@ export const menuItems: MenuItem[] = [
     path: '/admin',
     label: '控制台',
     icon: DashboardIcon
+  },
+  {
+    path: '/admin/content',
+    label: '内容管理',
+    icon: ContentIcon
   },
   {
     path: '/admin/users',

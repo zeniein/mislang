@@ -75,6 +75,9 @@
           </li>
         </ul>
       </div>
+      <router-link to="/login" class="btn btn-primary mr-2">
+        Login
+      </router-link>
       <div class="dropdown dropdown-end">
         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">

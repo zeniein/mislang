@@ -54,10 +54,11 @@ meta:
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 const form = reactive({
@@ -68,7 +69,9 @@ const form = reactive({
 const handleLogin = async () => {
   try {
     await userStore.login(form)
-    router.push('/admin')
+    // 登录成功后重定向到之前的页面或管理页面
+    const redirectPath = route.query.redirect as string || '/admin'
+    router.push(redirectPath)
   } catch (error) {
     console.error('Login failed:', error)
   }

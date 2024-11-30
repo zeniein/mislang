@@ -34,106 +34,114 @@
 
     <!-- Template Editor Modal -->
     <dialog ref="editorModal" class="modal">
-      <div class="modal-box w-11/12 max-w-5xl">
-        <h3 class="mb-4 text-lg font-bold">
-          {{ isEditing ? '编辑模板' : '新建模板' }}
-        </h3>
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="text-lg font-bold">{{ isEditing ? '编辑模板' : '新建模板' }}</h3>
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4" @click="closeEditor">✕</button>
+        </div>
         
-        <form @submit.prevent="saveTemplate" class="space-y-4">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">模板名称</span>
-            </label>
-            <input
-              v-model="currentTemplate.name"
-              type="text"
-              class="input input-bordered"
-              required
-            />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">模板类型</span>
-            </label>
-            <select v-model="currentTemplate.type" class="select select-bordered" required>
-              <option value="html">HTML</option>
-              <option value="text">纯文本</option>
-            </select>
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">模板内容</span>
-            </label>
-            <div class="h-[600px] w-full rounded border">
-              <MonacoEditor
-                v-model="currentTemplate.content"
-                :language="currentTemplate.type === 'html' ? 'html' : 'plaintext'"
-                theme="vs-dark"
-                class="h-full w-full"
+        <div class="modal-body">
+          <form @submit.prevent="saveTemplate" class="space-y-4">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">模板名称</span>
+              </label>
+              <input
+                v-model="currentTemplate.name"
+                type="text"
+                class="input input-bordered"
+                required
               />
             </div>
-          </div>
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">可用变量</span>
-            </label>
-            <div class="grid grid-cols-2 gap-4 rounded-lg bg-base-200 p-4 md:grid-cols-3">
-              <div
-                v-for="(desc, key) in availableVariables"
-                :key="key"
-                class="flex items-center justify-between rounded bg-base-100 p-2"
-              >
-                <code class="text-sm">{{ key }}</code>
-                <span class="text-sm text-base-content/70">{{ desc }}</span>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">模板类型</span>
+              </label>
+              <select v-model="currentTemplate.type" class="select select-bordered" required>
+                <option value="html">HTML</option>
+                <option value="text">纯文本</option>
+              </select>
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">模板内容</span>
+              </label>
+              <div class="h-[600px] w-full rounded border">
+                <MonacoEditor
+                  v-model="currentTemplate.content"
+                  :language="currentTemplate.type === 'html' ? 'html' : 'plaintext'"
+                  theme="vs-dark"
+                  class="h-full w-full"
+                />
               </div>
             </div>
-          </div>
 
-          <div class="modal-action">
-            <button type="button" class="btn" @click="closeEditor">取消</button>
-            <button type="submit" class="btn btn-primary">保存</button>
-          </div>
-        </form>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">可用变量</span>
+              </label>
+              <div class="grid-variables rounded-lg bg-base-200 p-4">
+                <div
+                  v-for="(desc, key) in availableVariables"
+                  :key="key"
+                  class="flex items-center justify-between rounded bg-base-100 p-2"
+                >
+                  <code class="text-sm">{{ key }}</code>
+                  <span class="text-sm text-base-content/70">{{ desc }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn" @click="closeEditor">取消</button>
+              <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+          </form>
+        </div>
       </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>关闭</button>
+      </form>
     </dialog>
 
     <!-- Preview Modal -->
     <dialog ref="previewModal" class="modal">
-      <form method="dialog" class="modal-backdrop">
-        <button>关闭</button>
-      </form>
-      <div class="modal-box max-h-none w-11/12 max-w-5xl">
-        <form method="dialog">
-          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        </form>
-        <h3 class="mb-4 text-lg font-bold">预览模板</h3>
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="text-lg font-bold">预览模板</h3>
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4" @click="closePreview">✕</button>
+        </div>
         
-        <div class="mb-4 space-y-4">
-          <div class="flex flex-wrap gap-4">
-            <div v-for="(value, key) in previewData" :key="key" class="form-control">
-              <label class="label">
-                <span class="label-text">{{ availableVariables[key] }}</span>
-              </label>
-              <input
-                v-model="previewData[key]"
-                type="text"
-                class="input input-bordered input-sm"
-              />
+        <div class="modal-body">
+          <div class="mb-4 space-y-4">
+            <div class="flex flex-wrap gap-4">
+              <div v-for="(value, key) in previewData" :key="key" class="form-control">
+                <label class="label">
+                  <span class="label-text">{{ availableVariables[key] }}</span>
+                </label>
+                <input
+                  v-model="previewData[key]"
+                  type="text"
+                  class="input input-bordered input-sm"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="preview-section">
-          <div class="preview-container">
-            <div class="preview-scroll">
-              <div class="preview-content" v-html="previewContent"></div>
+          <div class="preview-section">
+            <div class="preview-container">
+              <div class="preview-scroll">
+                <div class="preview-content" v-html="previewContent"></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <form method="dialog" class="modal-backdrop">
+        <button @click="closePreview">关闭</button>
+      </form>
     </dialog>
   </div>
 </template>
@@ -170,62 +178,28 @@ const templates = ref<Template[]>([
 <html>
 <head>
   <meta charset="utf-8">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .header {
-      background-color: #f8f9fa;
-      padding: 20px;
-      text-align: center;
-      border-radius: 5px;
-    }
-    .content {
-      padding: 20px;
-    }
-    .footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 12px;
-      color: #666;
-    }
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      margin: 20px 0;
-    }
-  </style>
 </head>
-<body>
-  <div class="header">
-    <h1>欢迎加入 \${companyName}</h1>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-radius: 5px;">
+    <h1 style="margin: 0; color: #333;">\${companyName}</h1>
   </div>
   
-  <div class="content">
-    <p>亲爱的 \${userName}：</p>
-    <p>感谢您注册我们的服务！我们很高兴能够为您提供支持。</p>
-    <p>您的账号信息如下：</p>
-    <ul>
-      <li>用户名：\${userName}</li>
-      <li>邮箱：\${userEmail}</li>
+  <div style="padding: 20px;">
+    <p style="margin: 10px 0;">亲爱的 \${userName}：</p>
+    <p style="margin: 10px 0;">感谢您注册我们的服务！我们很高兴能够为您提供支持。</p>
+    <p style="margin: 10px 0;">您的账号信息如下：</p>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+      <li style="margin: 5px 0;">用户名：\${userName}</li>
+      <li style="margin: 5px 0;">邮箱：\${userEmail}</li>
     </ul>
-    <p>如需帮助，请随时与我们联系。</p>
+    <p style="margin: 10px 0;">如需帮助，请随时与我们联系。</p>
     
-    <a href="#" class="button">开始使用</a>
+    <a href="#" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;">开始使用</a>
   </div>
 
-  <div class="footer">
-    <p>此邮件由系统自动发送，请勿直接回复</p>
-    <p>© \${companyName} 版权所有</p>
+  <div style="text-align: center; padding: 20px; font-size: 12px; color: #666;">
+    <p style="margin: 5px 0;">此邮件由系统自动发送，请勿直接回复</p>
+    <p style="margin: 5px 0;">© \${companyName} 版权所有</p>
   </div>
 </body>
 </html>`,
@@ -242,81 +216,7 @@ const templates = ref<Template[]>([
 
 如果这不是您的操作，请忽略此邮件。
 
-祝好，
-\${companyName} 团队`,
-    updatedAt: new Date()
-  },
-  {
-    id: '3',
-    name: '密码重置',
-    type: 'html',
-    content: `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .header {
-      background-color: #f8f9fa;
-      padding: 20px;
-      text-align: center;
-      border-radius: 5px;
-    }
-    .content {
-      padding: 20px;
-    }
-    .footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 12px;
-      color: #666;
-    }
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      margin: 20px 0;
-    }
-    .warning {
-      color: #dc3545;
-      font-size: 12px;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>密码重置请求</h1>
-  </div>
-  
-  <div class="content">
-    <p>亲爱的 \${userName}：</p>
-    <p>我们收到了您的密码重置请求。如果这是您的操作，请点击下面的按钮重置密码：</p>
-    
-    <a href="\${resetLink}" class="button">重置密码</a>
-    
-    <p>或者复制以下链接到浏览器：</p>
-    <p style="word-break: break-all;">\${resetLink}</p>
-    
-    <p class="warning">注意：此链接将在 \${expirationTime} 分钟后失效。如果您没有请求重置密码，请忽略此邮件。</p>
-  </div>
-
-  <div class="footer">
-    <p>此邮件由系统自动发送，请勿直接回复</p>
-    <p>© \${companyName} 版权所有</p>
-  </div>
-</body>
-</html>`,
+此邮件由系统自动发送，请勿直接回复。`,
     updatedAt: new Date()
   }
 ])
@@ -365,52 +265,15 @@ const refreshPreview = () => {
   })
 
   if (currentTemplate.value.type === 'html') {
-    // 为 HTML 内容添加基础样式和容器
+    // 为 HTML 内容添加预览容器和样式重置
     content = `
-      <div class="email-preview">
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; width: 100%; max-width: 100%; margin: 0 auto; padding: 0; box-sizing: border-box; overflow-x: hidden;">
         ${content}
       </div>
-      <style>
-        .email-preview {
-          font-family: Arial, sans-serif;
-          line-height: 1.6;
-          color: #333;
-          max-width: 100%;
-          margin: 0 auto;
-          box-sizing: border-box;
-        }
-        .email-preview * {
-          max-width: 100%;
-          box-sizing: border-box;
-          margin-left: 0;
-          margin-right: 0;
-          padding-left: 0;
-          padding-right: 0;
-        }
-        .email-preview img {
-          height: auto;
-          display: block;
-        }
-        .email-preview a {
-          color: #007bff;
-          text-decoration: none;
-        }
-        .email-preview a:hover {
-          text-decoration: underline;
-        }
-        .email-preview table {
-          width: 100% !important;
-          table-layout: fixed;
-        }
-        .email-preview td, .email-preview th {
-          word-break: break-word;
-          overflow-wrap: break-word;
-        }
-      </style>
     `
   } else {
     // 为纯文本添加预格式化样式
-    content = `<pre style="white-space: pre-wrap; font-family: monospace; margin: 0; max-width: 100%; overflow-x: hidden;">${content}</pre>`
+    content = `<pre style="white-space: pre-wrap; font-family: monospace; margin: 0; padding: 0; width: 100%; max-width: 100%; overflow-x: hidden; color: #333; line-height: 1.5;">${content}</pre>`
   }
 
   previewContent.value = content
@@ -491,63 +354,115 @@ const closePreview = () => {
 
 <style scoped>
 .modal-box {
-  @apply relative;
-  margin: 1.5rem auto;
+  @apply relative flex flex-col h-[90vh] mx-6 p-0 w-[95vw] max-w-[1200px];
+}
+
+@screen sm {
+  .modal-box {
+    @apply h-[98vh] mx-2 w-[calc(100vw-0.5rem)];
+  }
+}
+
+.modal-header {
+  @apply sticky top-0 z-10 flex items-center justify-between bg-base-100 border-b border-base-300 p-6;
+}
+
+@screen sm {
+  .modal-header {
+    @apply p-4;
+  }
+}
+
+.modal-body {
+  @apply flex-1 overflow-y-auto p-6;
+}
+
+@screen sm {
+  .modal-body {
+    @apply p-4;
+  }
+}
+
+.modal-footer {
+  @apply mt-4 flex justify-end gap-2 border-t border-base-300 p-6;
+}
+
+@screen sm {
+  .modal-footer {
+    @apply mt-2 p-4;
+  }
 }
 
 .preview-section {
-  @apply relative -mx-6 bg-white;
-  height: 60vh;
+  @apply relative bg-white h-[calc(90vh-200px)] m-0 p-0 w-full max-w-full overflow-hidden;
+}
+
+@screen sm {
+  .preview-section {
+    @apply h-[calc(98vh-180px)];
+  }
 }
 
 .preview-container {
-  @apply absolute inset-0 overflow-hidden;
-  padding: 1rem;
+  @apply absolute inset-0 p-4 w-full max-w-full overflow-hidden;
 }
 
 .preview-scroll {
-  @apply h-full overflow-auto;
-  padding: 1rem;
+  @apply h-full w-full max-w-full overflow-auto p-4;
 }
 
 .preview-content {
-  @apply relative mx-auto w-full;
-  max-width: 100%;
+  @apply relative mx-auto w-full max-w-full overflow-x-hidden;
 }
 
-:deep(.preview-content) {
-  & * {
-    max-width: 100% !important;
-    box-sizing: border-box;
-  }
+/* 编辑器相关样式 */
+.form-control {
+  @apply w-full;
+}
 
-  & img {
-    height: auto;
-    display: block;
-  }
-
-  & table {
-    width: 100% !important;
-    table-layout: fixed;
-  }
-
-  & td,
-  & th {
-    word-break: break-word;
+@screen sm {
+  .monaco-editor {
+    @apply !h-[400px];
   }
 }
 
-/* 防止模态框影响页面宽度 */
+.grid-variables {
+  @apply grid gap-4 grid-cols-[repeat(auto-fill,minmax(250px,1fr))];
+}
+
+@screen sm {
+  .grid-variables {
+    @apply grid-cols-1;
+  }
+}
+
+/* 模态框样式 */
+:global(body:has(dialog[open])) {
+  @apply overflow-hidden pr-0 max-w-none;
+}
+
 :deep(.modal) {
-  @apply fixed inset-0;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  overflow-x: hidden !important;
+  @apply fixed inset-0 w-screen max-w-full overflow-hidden p-4;
+}
+
+@screen sm {
+  :deep(.modal) {
+    @apply p-0;
+  }
+}
+
+:deep(.modal[open]) {
+  @apply flex items-start justify-center pt-16;
+}
+
+@screen sm {
+  :deep(.modal[open]) {
+    @apply pt-8;
+  }
 }
 
 :deep(.modal-backdrop) {
-  @apply fixed inset-0;
-  background-color: rgba(0, 0, 0, 0.3);
+  @apply fixed inset-0 bg-black/30;
 }
 
 :deep(.modal-backdrop button) {
