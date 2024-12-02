@@ -3,7 +3,9 @@ import {
   UsersIcon, 
   SettingsIcon,
   EmailIcon,
-  ContentIcon
+  ContentIcon,
+  TodoIcon,
+  ScheduleIcon
 } from '../components/icons'
 
 export interface MenuItem {
@@ -22,6 +24,16 @@ export const menuItems: MenuItem[] = [
     path: '/admin/content',
     label: '内容管理',
     icon: ContentIcon
+  },
+  {
+    path: '/admin/todo',
+    label: '待办事项',
+    icon: TodoIcon
+  },
+  {
+    path: '/admin/schedule',
+    label: '日程安排',
+    icon: ScheduleIcon
   },
   {
     path: '/admin/users',

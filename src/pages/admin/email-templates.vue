@@ -37,9 +37,14 @@
       <div class="modal-box">
         <div class="modal-header">
           <h3 class="text-lg font-bold">{{ isEditing ? '编辑模板' : '新建模板' }}</h3>
-          <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4" @click="closeEditor">✕</button>
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
+            @click="closeEditor"
+          >
+            ✕
+          </button>
         </div>
-        
+
         <div class="modal-body">
           <form @submit.prevent="saveTemplate" class="space-y-4">
             <div class="form-control">
@@ -111,9 +116,14 @@
       <div class="modal-box">
         <div class="modal-header">
           <h3 class="text-lg font-bold">预览模板</h3>
-          <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4" @click="closePreview">✕</button>
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4"
+            @click="closePreview"
+          >
+            ✕
+          </button>
         </div>
-        
+
         <div class="modal-body">
           <div class="mb-4 space-y-4">
             <div class="flex flex-wrap gap-4">
@@ -147,7 +157,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import MonacoEditor from '@/components/MonacoEditor.vue'
 
 interface Template {
@@ -159,7 +169,7 @@ interface Template {
 }
 
 // 可用的模板变量
-const availableVariables = {
+const availableVariables: Record<string, string> = {
   '${userName}': '用户名',
   '${userEmail}': '用户邮箱',
   '${companyName}': '公司名称',
@@ -257,7 +267,7 @@ const refreshPreview = () => {
   }
 
   let content = currentTemplate.value.content
-  
+
   // 替换所有变量
   Object.entries(previewData.value).forEach(([key, value]) => {
     const regex = new RegExp(`\\$\\{${key}\\}`, 'g')
@@ -280,14 +290,21 @@ const refreshPreview = () => {
 }
 
 // 监听预览数据变化
-watch(previewData, () => {
-  refreshPreview()
-}, { deep: true })
+watch(
+  previewData,
+  () => {
+    refreshPreview()
+  },
+  { deep: true }
+)
 
 // 监听当前模板变化
-watch(() => currentTemplate.value?.content, () => {
-  refreshPreview()
-})
+watch(
+  () => currentTemplate.value?.content,
+  () => {
+    refreshPreview()
+  }
+)
 
 // 创建新模板
 const createTemplate = () => {
@@ -468,4 +485,5 @@ const closePreview = () => {
 :deep(.modal-backdrop button) {
   @apply hidden;
 }
+
 </style>
