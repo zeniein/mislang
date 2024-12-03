@@ -233,9 +233,12 @@ const templates = ref<Template[]>([
 
 const editorModal = ref<HTMLDialogElement>()
 const previewModal = ref<HTMLDialogElement>()
-const currentTemplate = ref<Partial<Template>>({
+const currentTemplate = ref<Template>({
+  id: '',
+  name: '',
   type: 'html',
-  content: ''
+  content: '',
+  updatedAt: new Date()
 })
 const isEditing = ref(false)
 const previewData = ref({
@@ -309,8 +312,11 @@ watch(
 // 创建新模板
 const createTemplate = () => {
   currentTemplate.value = {
+    id: '',
+    name: '',
     type: 'html',
-    content: ''
+    content: '',
+    updatedAt: new Date()
   }
   isEditing.value = false
   editorModal.value?.showModal()
@@ -485,5 +491,4 @@ const closePreview = () => {
 :deep(.modal-backdrop button) {
   @apply hidden;
 }
-
 </style>

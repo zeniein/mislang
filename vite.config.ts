@@ -11,11 +11,23 @@ export default defineConfig({
     }
   },
   plugins: [
-    vue(),
+    vue({
+      script: {
+        defineModel: true,
+        propsDestructure: true
+      },
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag === 'route'
+        }
+      }
+    }),
     Pages({
       dirs: 'src/pages',
       extensions: ['vue'],
-      exclude: ['**/components/*.vue']
+      exclude: ['**/components/*.vue'],
+      importMode: 'async',
+      routeBlockLang: 'yaml'
     })
   ],
   optimizeDeps: {
